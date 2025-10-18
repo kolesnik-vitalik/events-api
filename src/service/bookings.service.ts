@@ -14,8 +14,11 @@ export class BookingService{
     try{
       await this.bookingDao.reserve(bookingDto);
     }catch(error){
-      if (error instanceof Error && error.message === 'BOOKING_ALREADY_EXISTS') {
+      if (error instanceof Error && error.message === 'BOOKING_EXISTS') {
         throw new Error('Такой пользователь уже забронировал место на данное мероприятие');
+      }
+      if (error instanceof Error && error.message === 'EVENT_NOT_EXISTS') {
+        throw new Error('Такого мероприятия не существует');
       }
     }
   }
