@@ -1,7 +1,12 @@
-console.log("npm run dev!");
+import 'dotenv/config';
+import express from 'express';
+import bookingRoutes from './routes/bookings.routes';
 
-function greet(name: string): string {
-    return `Hello, ${name}!`;
-}
+const app = express();
+app.use(express.json());
 
-console.log(greet("Alice"));
+app.use('/api/bookings', bookingRoutes);
+
+app.listen(8080, () => {
+  console.log('Server running on http://localhost:8080');
+});
