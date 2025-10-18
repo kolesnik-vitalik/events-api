@@ -1,17 +1,14 @@
 import { Request, Response } from 'express';
 import { BookingService } from '../service/bookings.service';
-import db from '../config/db';
 
 export class BookingController{
 
-    booking: BookingService;
-
-    constructor(booking: BookingService){
+    constructor(private readonly booking: BookingService){
         this.booking = booking;
     }
 
-     async getAllEvents(req: Request, res: Response){
-        let data = await this.booking.getAll();
+    public getAll = async (req: Request, res: Response) =>{
+        const data = await this.booking.getAll();
         res.json(data);
     }
 
