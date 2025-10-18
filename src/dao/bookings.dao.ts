@@ -1,10 +1,32 @@
 import db from '../config/db';
+import { BookingDto } from '../dto/bookings';
 
 export class BookingDao{
 
-    public getAllEvents = async () =>{
-        const data = await db.query('SELECT * FROM events');
-        return data.rows;
+    public getAllEvents = async (): Promise<BookingDto[]> =>{
+        try{
+            const eventsList = await db.query('SELECT * FROM events');
+            return eventsList.rows;
+        }catch(error){
+            console.error('Database error in getAllEvents:', error);
+            throw new Error('Failed to fetch events');
+        }
+    }
+
+    public reserve = async (bookingDto: BookingDto) =>{
+        const existing = await db.query(
+            'SELECT 1 FROM bookings WHERE event_id = $1 AND user_id = $2',
+            [bookingDto.event_id, bookingDto.user_id]
+          );
+
+        if(existing.rows.length > 0){
+            throw new Error("BOOKING_EXISTS");
+        }
+
+        await db.query(
+            'INSERT INTO bookings (event_id, user_id, created_at) VALUES ($1, $2, NOW())',
+            [bookingDto.event_id, bookingDto.user_id]
+        );
     }
 
 }

@@ -1,20 +1,23 @@
 import { BookingDto} from "../dto/bookings";
-import db from '../config/db';
+import { BookingDao } from "../dao/bookings.dao";
 
 export class BookingService{
 
-  getAll = async () =>{
-    try {
-        let result = await db.query('SELECT * FROM events');
-        return result.rows;
-      } catch (error) {
-        console.error('Database error in getAllEvents:', error);
-        throw new Error('Failed to fetch events');
-      }
+  constructor(private readonly bookingDao: BookingDao){}
+
+  public getAllEvents = async (): Promise<BookingDto[]> =>{
+        const eventsList = await this.bookingDao.getAllEvents();
+        return eventsList;
   }
 
-     createBooking(bookingDto: BookingDto){
-        
+  public reserve = async (bookingDto: BookingDto) =>{
+    try{
+      await this.bookingDao.reserve(bookingDto);
+    }catch(error){
+      if (error instanceof Error && error.message === 'BOOKING_ALREADY_EXISTS') {
+        throw new Error('Такой пользователь уже забронировал место на данное мероприятие');
+      }
     }
+  }
 
 }
