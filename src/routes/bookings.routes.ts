@@ -11,5 +11,6 @@ const router = Router();
 
 router.get('/events', bookingController.getAllEvents);
 router.post('/events', bookingController.reserve);
+router.get('/top_users', bookingController.getTopUser);
 
 export default router;

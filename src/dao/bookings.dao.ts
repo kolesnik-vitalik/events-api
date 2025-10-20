@@ -44,4 +44,14 @@ export class BookingDao{
           return result.rows.length > 0;
     }
 
+    public getTopUser = async () => {
+            const created_at = await db.query("select * from bookings where event_id = 1");
+            const data = await db.query("select user_id, COUNT(*) as booking_count from bookings group by user_id");
+            const resulte_with_date = {
+                created_at: [...created_at.rows],
+                data: [...data.rows]
+            }
+            return resulte_with_date;
+    }
+
 }

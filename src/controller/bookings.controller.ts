@@ -40,4 +40,15 @@ export class BookingController{
         }
     }
 
+    public getTopUser = async (req: Request, res: Response)=>{
+        try{
+           const resulte = await this.bookingService.getTopUser();
+           res.status(200).json(resulte);
+        }catch(error){
+            if(error instanceof Error){
+                return res.status(500).json({error: error.message});
+            }
+        }
+    }
+
 }
