@@ -49,7 +49,8 @@ export class BookingDao{
                 SELECT user_id, COUNT(*) as booking_count, MIN(created_at) as time
                 FROM bookings
                 GROUP BY user_id
-                ORDER BY booking_count DESC, time;
+                ORDER BY booking_count DESC, time
+                LIMIT 10;
             `);
             return data.rows;
     }
